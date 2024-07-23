@@ -1,0 +1,24 @@
+name: Deploy
+
+on: 
+    push:
+        branches: ["main"]
+    pull_request:
+        branches: ["main"]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: action/checkout@v3
+        - name: Listar todos os arquivos do projeto
+          run: la -la
+
+        - name: Tranferis os arquivos para a VM
+          uses: appleboy/scp-action@master
+          with:
+            host: ${{secrets.IP}}
+            username: ubuntu
+            key: ${{secrets.SSH.PRIVATE.KEy}}
+            source: "*"
+            target: "/home/ubuntu"
